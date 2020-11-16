@@ -127,9 +127,11 @@ class TestFrontEnd(http.Controller):
                 'id': reservation.room_type_id.id,
                 'name': reservation.room_type_id.name,
             },
-            'room_id': {
-                'id': reservation.room_id.id,
-                'name': reservation.room_id.name,
+            'preferred_room_id': {
+                'id': reservation.preferred_room_id.id if \
+                    reservation.preferred_room_id else False,
+                'name': reservation.preferred_room_id.name if \
+                    reservation.preferred_room_id else reservation.rooms,
             },
             'extras': reservation._get_reservation_services(),
             'nights': reservation.nights,
