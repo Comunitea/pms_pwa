@@ -34,37 +34,45 @@ odoo.define("pms_pwa.calendar", function (require) {
     $(document).on("click", ".open-modalDialog", function () {
         const date_options = {year: "numeric", month: "2-digit", day: "2-digit"};
         var date_string = $(this).data("date");
-        console.log(date_string);
+
         try {
             const parts_of_date = date_string.split("/");
-            console.log(parts_of_date);
+
             const new_date =
                 parts_of_date[1] + "/" + parts_of_date[0] + "/" + parts_of_date[2];
-            console.log(new_date);
+
             date_string = new_date;
         } catch (error) {
             console.error("Invalid format date");
         }
         const date = new Date(date_string);
-        console.log(date);
+
         const tomorrow = new Date(date);
         tomorrow.setDate(tomorrow.getDate() + 1);
         var checkin_date = date.toLocaleDateString(
             document.documentElement.lang,
             date_options
         );
-        console.log("Checkin --> ", checkin_date);
+
         var checkout_date = tomorrow.toLocaleDateString(
             document.documentElement.lang,
             date_options
         );
-        console.log("checkout_date --> ", checkout_date);
+
         var range_date = checkin_date + " - " + checkout_date;
         var room = $(this).data("room");
         var pricelist = $(this).data("pricelist");
-        $('input[name="range_check_date_modal_reservation"]').val(range_date);
-        $('input[name="range_check_date_modal_reservation_multi"]').val(range_date);
-        $('select[name="room_type"]').val(room);
-        $('select[name="pricelist"]').val(pricelist);
+        setTimeout(function () {
+            $('input[name="range_check_date_modal_reservation"]').val(range_date);
+            $('input[name="range_check_date_modal_reservation_multi"]').val(range_date);
+            $('select[name="room_type"]').val(room);
+            $('select[name="pricelist"]').val(pricelist);
+            $("#o_pms_pwa_new_reservation_modal")
+                .find("input[name='range_check_date_modal_reservation']")
+                .trigger("change");
+            $("#o_pms_pwa_new_reservation_modal")
+                .find("input[name='range_check_date_modal_reservation_multi']")
+                .trigger("change");
+        }, 300);
     });
 });

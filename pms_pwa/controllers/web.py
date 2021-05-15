@@ -597,8 +597,8 @@ class TestFrontEnd(http.Controller):
                     "reservation_lines": reservation_show_lines,
                     "total_amount": total_amount,
                 }
-
                 return data
+        print("PEPEPE")
         return json.dumps({"result": False, "message": _("Reservation not found")})
 
     @http.route(
@@ -1413,7 +1413,7 @@ class TestFrontEnd(http.Controller):
         )
 
     @http.route(
-        "/calendar/config/line",
+        "/calendar/config/save",
         type="json",
         auth="public",
         csrf=False,
@@ -1421,161 +1421,9 @@ class TestFrontEnd(http.Controller):
         website=True,
     )
     def calendar_config_list(self, date=False, search="", **post):
-        values = [
-            {
-                "id": 1,
-                "name": "Pricelist",
-                "date_list": [
-                    {
-                        "date": "05/05/2021",
-                        "price": 12,
-                        "min_stay": 1,
-                        "quota": 4,
-                        "max_stay": 1,
-                        "min_arrrival_stay": 1,
-                        "max_arrival_stay": 1,
-                        "block": False,
-                    },
-                    {
-                        "date": "06/05/2021",
-                        "price": 12,
-                        "min_stay": 1,
-                        "quota": 4,
-                        "max_stay": 1,
-                        "min_arrrival_stay": 1,
-                        "max_arrival_stay": 1,
-                        "block": False,
-                    },
-                    {
-                        "date": "07/05/2021",
-                        "price": 12,
-                        "min_stay": 1,
-                        "quota": 4,
-                        "max_stay": 1,
-                        "min_arrrival_stay": 1,
-                        "max_arrival_stay": 1,
-                        "block": False,
-                    },
-                    {
-                        "date": "08/05/2021",
-                        "price": 12,
-                        "min_stay": 1,
-                        "quota": 4,
-                        "max_stay": 1,
-                        "min_arrrival_stay": 1,
-                        "max_arrival_stay": 1,
-                        "block": True,
-                    },
-                    {
-                        "date": "09/05/2021",
-                        "price": 12,
-                        "min_stay": 1,
-                        "quota": 4,
-                        "max_stay": 1,
-                        "min_arrrival_stay": 1,
-                        "max_arrival_stay": 1,
-                        "block": False,
-                    },
-                    {
-                        "date": "10/05/2021",
-                        "price": 12,
-                        "min_stay": 1,
-                        "quota": 4,
-                        "max_stay": 1,
-                        "min_arrrival_stay": 1,
-                        "max_arrival_stay": 1,
-                        "block": False,
-                    },
-                    {
-                        "date": "11/05/2021",
-                        "price": 12,
-                        "min_stay": 1,
-                        "quota": 4,
-                        "max_stay": 1,
-                        "min_arrrival_stay": 1,
-                        "max_arrival_stay": 1,
-                        "block": False,
-                    },
-                ],
-            },
-            {
-                "id": 2,
-                "name": "Other pricelist",
-                "date_list": [
-                    {
-                        "date": "05/05/2021",
-                        "price": 12,
-                        "min_stay": 1,
-                        "quota": 4,
-                        "max_stay": 1,
-                        "min_arrrival_stay": 1,
-                        "max_arrival_stay": 1,
-                        "block": False,
-                    },
-                    {
-                        "date": "06/05/2021",
-                        "price": 12,
-                        "min_stay": 1,
-                        "quota": 4,
-                        "max_stay": 1,
-                        "min_arrrival_stay": 1,
-                        "max_arrival_stay": 1,
-                        "block": False,
-                    },
-                    {
-                        "date": "07/05/2021",
-                        "price": 12,
-                        "min_stay": 1,
-                        "quota": 4,
-                        "max_stay": 1,
-                        "min_arrrival_stay": 1,
-                        "max_arrival_stay": 1,
-                        "block": False,
-                    },
-                    {
-                        "date": "08/05/2021",
-                        "price": 12,
-                        "min_stay": 1,
-                        "quota": 4,
-                        "max_stay": 1,
-                        "min_arrrival_stay": 1,
-                        "max_arrival_stay": 1,
-                        "block": True,
-                    },
-                    {
-                        "date": "09/05/2021",
-                        "price": 12,
-                        "min_stay": 1,
-                        "quota": 4,
-                        "max_stay": 1,
-                        "min_arrrival_stay": 1,
-                        "max_arrival_stay": 1,
-                        "block": False,
-                    },
-                    {
-                        "date": "10/05/2021",
-                        "price": 12,
-                        "min_stay": 1,
-                        "quota": 4,
-                        "max_stay": 1,
-                        "min_arrrival_stay": 1,
-                        "max_arrival_stay": 1,
-                        "block": False,
-                    },
-                    {
-                        "date": "11/05/2021",
-                        "price": 12,
-                        "min_stay": 1,
-                        "quota": 4,
-                        "max_stay": 1,
-                        "min_arrrival_stay": 1,
-                        "max_arrival_stay": 1,
-                        "block": False,
-                    },
-                ],
-            },
-        ]
-        return values
+        params = http.request.jsonrequest.get("params")
+        _logger.info(params)
+        return True
 
     def parse_reservation(self, reservation):
         reservation_values = dict()

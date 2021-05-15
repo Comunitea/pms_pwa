@@ -9,6 +9,7 @@
         <t t-call="website.layout">
             <t t-set="page_title" t-value="'Reservation detail'" />
             <t t-call="pms_pwa.o_pms_pwa_edit_modal" />
+            <input type="hidden" name="reservation_id" t-attf-value="{{ reservation.id }}" />
             <div class="o_pms_pwa_roomdoo_reservation_modal" />
             <div class="o_pms_pwa_notifications o_pms_pwa_notifications_regular mt-2">
                 <span class="o_pms_notification_title">
@@ -228,12 +229,21 @@
                                                 <div class="row">
                                                     <div class="col-sm-12">
                                                         <label class="control-label col-12" for="room_type">
+                                                            <!-- <t t-esc="reservation.room_type_id.with_context(checkin=reservation.checkin, checkout=reservation.checkout, pricelist_id=1)._get_availability_rooms()"></t> -->
                                                             Tipo de habitación
                                                         </label>
                                                         <select class="form-control o_website_form_input o_domain_leaf_operator_select o_input" name="room_type">
-                                                            <option name="room_type" t-att-value="reservation.room_type_id.id" selected="selected">
+                                                            <!-- <option name="room_type" t-att-value="reservation.room_type_id.id" selected="selected">
                                                                 <t t-esc="reservation.room_type_id.name" />
-                                                            </option>
+                                                            </option> -->
+                                                            <t t-foreach="reservation.room_type_id" t-as="i">
+                                                                <option name="room_type" t-att-value="i.id" selected="selected" t-if="reservation.room_type_id.id == i.id">
+                                                                    <t t-esc="i.name" />
+                                                                </option>
+                                                                <option name="room_type" t-att-value="i.id" t-if="reservation.preferred_room_id.id != i.id">
+                                                                    <t t-esc="i.name" />
+                                                                </option>
+                                                            </t>
                                                         </select>
                                                     </div>
                                                 </div>
@@ -278,10 +288,18 @@
                                                 </div>
                                                 <div class="row mt-3">
                                                     <div class="col-12">
+                                                        <t t-if="lang and lang == 'es_ES'">
+                                                            <t t-set="checkin_date" t-value="reservation.checkin.strftime('%d/%m/%Y')"/>
+                                                            <t t-set="checkout_date" t-value="reservation.checkout.strftime('%d/%m/%Y')"/>
+                                                        </t>
+                                                        <t t-else="">
+                                                            <t t-set="checkin_date" t-value="reservation.checkin.strftime('%m/%d/%Y')"/>
+                                                            <t t-set="checkout_date" t-value="reservation.checkout.strftime('%m/%d/%Y')"/>
+                                                        </t>
                                                         <label class="control-label col-12" for="range_check_date_detail_reservation">
                                                             Check in - Check out
                                                         </label>
-                                                        <input class="form-control" type="text" name="range_check_date_detail_reservation" t-attf-value="{{ reservation.checkin }} : {{ reservation.checkout }}" />
+                                                        <input class="form-control" type="text" name="range_check_date_detail_reservation" t-attf-value="{{ checkin_date }} - {{ checkout_date }}" />
                                                         <span class="o_pms_pwa_calendar_icon">
                                                             <!-- <span class="fa fa-calendar" /> -->
                                                             <img src="/pms_pwa/static/img/svg/calendario-azul.svg" alt="calendar icon" title="calendar" width="20" />
@@ -290,8 +308,8 @@
                                                 </div>
                                                 <div class="row mt-3">
                                                     <div class="col-6">
-                                                        <input type="hidden" name="check_in_date" t-attf-value="{{ reservation.checkin }}" />
-                                                        <input type="hidden" name="check_out_date" t-attf-value="{{ reservation.checkout }}" />
+                                                        <input type="hidden" name="checkin" t-attf-value="{{ checkin_date }}" />
+                                                        <input type="hidden" name="checkout" t-attf-value="{{ checkout_date }}" />
                                                         <label class="control-label col-12" for="check_in_hour">
                                                             Hora Check in
                                                         </label>
@@ -306,24 +324,24 @@
                                                 </div>
                                                 <div class="row mt-3">
                                                     <div class="col-sm-12">
-                                                        <label class="control-label col-12" for="board_service_room_id">
+                                                        <label class="control-label col-12" for="allowed_board_service_room_ids">
                                                             Tipo de reserva
                                                         </label>
-                                                        <select class="form-control o_website_form_input o_domain_leaf_operator_select o_input" name="board_service_room_id">
-                                                            <option value="reservation.board_service_room_id">
-                                                                <t t-esc="reservation.board_service_room_id.display_name" />
+                                                        <select class="form-control o_website_form_input o_domain_leaf_operator_select o_input" name="allowed_board_service_room_ids">
+                                                            <option name="allowed_board_service_room_ids" t-foreach="reservation._get_allowed_board_service_room_ids()" t-as="key" t-att-value="key['id']">
+                                                                <t t-esc="key['name']" />
                                                             </option>
                                                         </select>
                                                     </div>
                                                 </div>
 
-                                                <div class="row m-3">
+                                                <div class="row m-3" id="o_pms_pwa_services_line">
 
                                                     <t t-foreach="reservation.service_ids" t-as="i">
                                                         <input type="hidden" t-attf-name="o_pms_pwa_service_line_{{i.id}}" t-attf-value="{{i.id}}"/>
                                                         <div class="col-12">
                                                             <div class="form-check mt-2" t-if="i.service_line_ids">
-                                                                <input class="o_pms_pwa_checkbox" type="checkbox" checked="checked" t-attf-id="defaultCheck{{i.id}}" data-toggle='collapse' t-attf-data-target='#collapsediv{{i.id}}' aria-expanded="true" t-attf-aria-controls="collapsediv{{i.id}}" />
+                                                                <input class="o_pms_pwa_checkbox" type="checkbox" checked="checked" t-attf-data-service_id="{{i.id}}" t-attf-id="defaultCheck{{i.id}}" data-toggle='collapse' t-attf-data-target='#collapsediv{{i.id}}' aria-expanded="true" t-attf-aria-controls="collapsediv{{i.id}}" />
                                                                 <label class="o_pms_pwa_checkbox_label" t-attf-for="defaultCheck{{i.id}}">
                                                                     <t t-esc="i.product_id.name" />
                                                                 </label>
@@ -401,11 +419,9 @@
                                                             Añadir servicio
                                                         </label>
                                                         <select class="form-control o_website_form_input o_domain_leaf_operator_select o_input" name="add_service">
-
-                                                            <option t-foreach="reservation.service_ids" t-as="key" t-att-value="key.id">
-                                                                <t t-esc="key.name" />
+                                                            <option t-foreach="reservation._get_allowed_service_ids()" t-as="key" t-att-value="key['id']">
+                                                                <t t-esc="key['name']" />
                                                             </option>
-
                                                         </select>
                                                     </div>
                                                 </div>
@@ -418,15 +434,12 @@
                                                         </div>
                                                     </div>
                                                     <div class="col-12">
-                                                        <label class="control-label col-12" for="travel_reason">
+                                                        <label class="control-label col-12" for="allowed_segmentations">
                                                             Motivo del viaje
                                                         </label>
-                                                        <select class="form-control o_website_form_input o_domain_leaf_operator_select o_input" name="travel_reason">
-                                                            <option name="travel_reason" value="1">
-                                                                Turismo
-                                                            </option>
-                                                            <option name="travel_reason" value="2">
-                                                                Trabajo
+                                                        <select class="form-control o_website_form_input o_domain_leaf_operator_select o_input" name="allowed_segmentations">
+                                                            <option t-foreach="reservation._get_allowed_segmentations()" t-as="key" t-att-value="key['id']">
+                                                                <t t-esc="key['name']" />
                                                             </option>
                                                         </select>
                                                     </div>
@@ -455,12 +468,12 @@
                                             <div class="form-group form-field mt8">
                                                 <div class="row">
                                                     <div class="col-sm-12">
-                                                        <label class="control-label col-12" for="rate_type">
+                                                        <label class="control-label col-12" for="allowed_pricelists">
                                                             Tipo de tarifa
                                                         </label>
-                                                        <select class="form-control o_website_form_input o_domain_leaf_operator_select o_input" name="rate_type">
-                                                            <option name="rate_type" t-att-value="reservation.reservation_type" selected="selected">
-                                                                <t t-esc="reservation.reservation_type" />
+                                                        <select class="form-control o_website_form_input o_domain_leaf_operator_select o_input" name="allowed_pricelists">
+                                                            <option name="allowed_pricelists" t-foreach="reservation._get_allowed_pricelists()" t-as="key" t-att-value="key['id']">
+                                                                <t t-esc="key['name']" />
                                                             </option>
                                                         </select>
                                                     </div>

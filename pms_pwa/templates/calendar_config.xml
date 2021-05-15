@@ -35,11 +35,8 @@
                                     </h2>
                                 </div>
                             </div>
-                            <div class="col-6 col-sm-2">
-                                <form method="post" action="">
-                                    <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()" />
-                                    <input type="submit" id="save" name="save" style="min-width:100px;" value="Guardar" class="btn btn-radius btn-pms_pwa ml-4  d-none"></input>
-                                </form>
+                            <div id="buttom_save" class="col-6 col-sm-2">
+                                <button id="save" name="save" style="min-width:100px;"  class="btn btn-radius btn-pms_pwa ml-4 d-none">Guardar</button>
                             </div>
                             <div class="col-6 col-sm-8">
                                 <div class="o_pms_pwa_calendar_select  d-none d-lg-block">
@@ -176,30 +173,30 @@
                                                                 <t t-set="list_price" t-value="obj.with_context(date=date_list[room_day], pricelist_id=price.id, pms_property_id=current_property)._get_rules_date()"></t>
                                                                 <td class="o_pms_pwa_table_cell" t-attf-data="{{ room_day }}">
                                                                     <p>
-                                                                        <input t-attf-tabindex="{{ price.id }}1{{room_day}}" style="width:80px;" type="text" t-att-value="obj.product_id.with_context(quantity=1, date=date_list[room_day], date_overnight=date_list[room_day], pricelist=price.id, property=current_property).price" name="price" />
+                                                                        <input t-attf-data-room="{{ obj.id }}" t-attf-data-pricelist="{{ price.id }}" t-attf-data-date="{{ date_list[room_day] }}" data-edit="false" t-attf-tabindex="{{ price.id }}1{{room_day}}" style="width:80px;" type="text" t-att-value="obj.product_id.with_context(quantity=1, date=date_list[room_day], date_overnight=date_list[room_day], pricelist=price.id, property=current_property).price" name="price" />
                                                                     </p>
                                                                     <p>
-                                                                        <input t-attf-tabindex="{{ price.id }}2{{room_day}}" style="width:80px;" type="text" t-attf-value="{{ list_price['min_stay'] }}" name="min_stay" />
+                                                                        <input t-attf-data-room="{{ obj.id }}" t-attf-data-pricelist="{{ price.id }}" t-attf-data-date="{{ date_list[room_day] }}" data-edit="false" t-attf-tabindex="{{ price.id }}2{{room_day}}" style="width:80px;" type="text" t-attf-value="{{ list_price['min_stay'] }}" name="min_stay" />
                                                                     </p>
                                                                     <p>
-                                                                        <input t-attf-tabindex="{{ price.id }}3{{room_day}}" style="width:80px;" type="text" t-attf-value="{{ list_price['quota'] }}" name="quota" />
+                                                                        <input t-attf-data-room="{{ obj.id }}" t-attf-data-pricelist="{{ price.id }}" t-attf-data-date="{{ date_list[room_day] }}" data-edit="false" t-attf-tabindex="{{ price.id }}3{{room_day}}" style="width:80px;" type="text" t-attf-value="{{ list_price['quota'] }}" name="quota" />
                                                                     </p>
                                                                     <div class="collapse" t-attf-id="collapse_2_accordion_{{price.id}}" t-attf-aria-labelledby="{{ price.id }}">
                                                                         <p>
-                                                                            <input t-attf-tabindex="{{ price.id }}4{{room_day}}" style="width:80px;" type="text" t-attf-value="{{ list_price['max_stay'] }}" name="max_stay" />
+                                                                            <input t-attf-data-room="{{ obj.id }}" t-attf-data-pricelist="{{ price.id }}" t-attf-data-date="{{ date_list[room_day] }}" data-edit="false" t-attf-tabindex="{{ price.id }}4{{room_day}}" style="width:80px;" type="text" t-attf-value="{{ list_price['max_stay'] }}" name="max_stay" />
                                                                         </p>
                                                                         <p>
-                                                                            <input t-attf-tabindex="{{ price.id }}5{{room_day}}" style="width:80px;" type="text" t-attf-value="{{ list_price['min_stay_arrival'] }}" name="min_stay_arrival" />
+                                                                            <input t-attf-data-room="{{ obj.id }}" t-attf-data-pricelist="{{ price.id }}" t-attf-data-date="{{ date_list[room_day] }}" data-edit="false" t-attf-tabindex="{{ price.id }}5{{room_day}}" style="width:80px;" type="text" t-attf-value="{{ list_price['min_stay_arrival'] }}" name="min_stay_arrival" />
                                                                         </p>
                                                                         <p>
-                                                                            <input t-attf-tabindex="{{ price.id }}6{{room_day}}" style="width:80px;" type="text" t-attf-value="{{ list_price['max_stay_arrival'] }}" name="max_stay_arrival" />
+                                                                            <input t-attf-data-room="{{ obj.id }}" t-attf-data-pricelist="{{ price.id }}" t-attf-data-date="{{ date_list[room_day] }}" data-edit="false" t-attf-tabindex="{{ price.id }}6{{room_day}}" style="width:80px;" type="text" t-attf-value="{{ list_price['max_stay_arrival'] }}" name="max_stay_arrival" />
                                                                         </p>
                                                                         <p>
                                                                             <t t-if="list_price['closed']">
-                                                                                <input t-attf-tabindex="{{ price.id }}7{{room_day}}" style="width:80px;" type="checkbox" checked="checked" name="closed" />
+                                                                                <input t-attf-data-room="{{ obj.id }}" t-attf-data-pricelist="{{ price.id }}" t-attf-data-date="{{ date_list[room_day] }}" data-edit="false" t-attf-tabindex="{{ price.id }}7{{room_day}}" style="width:80px;" type="checkbox" checked="checked" name="closed" />
                                                                             </t>
                                                                             <t t-else="">
-                                                                                <input t-attf-tabindex="{{ price.id }}7{{room_day}}" style="width:80px;" type="checkbox" name="closed" />
+                                                                                <input t-attf-data-room="{{ obj.id }}" t-attf-data-pricelist="{{ price.id }}" t-attf-data-date="{{ date_list[room_day] }}" data-edit="false" t-attf-tabindex="{{ price.id }}7{{room_day}}" style="width:80px;" type="checkbox" name="closed" />
                                                                             </t>
                                                                         </p>
                                                                     </div>

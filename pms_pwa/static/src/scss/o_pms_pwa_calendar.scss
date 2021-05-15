@@ -410,60 +410,60 @@ section.o_pms_pwa_roomdoo {
         .o_pms_pwa_line_before {
             &_success::after {
                 top: 0.75em;
-                left: -155px;
+                left: -140px;
                 background-color: var(--success);
                 content: "";
                 display: inline-block;
                 height: 3px;
                 position: relative;
                 vertical-align: middle;
-                width: 60px;
+                width: 51px;
             }
             &_success::before {
-                display: none;
+                display: none !important;
             }
             &_warning::after {
                 top: 0.75em;
-                left: -155px;
+                left: -140px;
                 background-color: var(--warning);
                 content: "";
                 display: inline-block;
                 height: 3px;
                 position: relative;
                 vertical-align: middle;
-                width: 60px;
+                width: 51px;
             }
             &_warning::before {
-                display: none;
+                display: none !important;
             }
 
             &_danger::after {
                 top: 0.75em;
-                left: -155px;
+                left: -140px;
                 background-color: var(--danger);
                 content: "";
                 display: inline-block;
                 height: 3px;
                 position: relative;
                 vertical-align: middle;
-                width: 60px;
+                width: 51px;
             }
             &_danger::before {
-                display: none;
+                display: none !important;
             }
             &_info::after {
                 top: 0.75em;
-                left: -155px;
+                left: -140px;
                 background-color: $theme-color;
                 content: "";
                 display: inline-block;
                 height: 3px;
                 position: relative;
                 vertical-align: middle;
-                width: 60px;
+                width: 51px;
             }
             &_info::before {
-                display: none;
+                display: none !important;
             }
         }
         .o_pms_pwa_calendar_line {

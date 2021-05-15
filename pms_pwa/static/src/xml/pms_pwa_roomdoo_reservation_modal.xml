@@ -311,7 +311,7 @@
                                                                                 </div>
                                                                             </td>
                                                                             <td>
-                                                                                <input type="number" t-attf-data-main_field="service_ids" t-attf-data-main_field_id="{{ service }}" data-subservice_name="service_line_ids" t-attf-data-field_id="{{s}}" t-attf-id="price_{{ service }}_{{ s }}" name="price"  t-attf-value="{{s_value.price}}" class="form-control o_pms_pwa_modal_number" />
+                                                                                <input type="number" t-attf-data-main_field="service_ids" t-attf-data-main_field_id="{{ service }}" data-subservice_name="service_line_ids" t-attf-data-field_id="{{s}}" t-attf-id="price_{{ service }}_{{ s }}" name="price"  t-attf-value="{{ s_value.price_unit }}" class="form-control o_pms_pwa_modal_number" />
                                                                             </td>
                                                                         </tr>
 
