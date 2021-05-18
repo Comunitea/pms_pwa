@@ -569,10 +569,7 @@ class TestFrontEnd(http.Controller):
             if reservation_ids:
                 # TODO resisar si se puede hacer de otra forma.
                 reservation_lines = folio.sale_line_ids.filtered(
-                    lambda x: x.reservation_id.id in reservation_ids
-                )
-                reservation_lines += folio.sale_line_ids.filtered(
-                    lambda x: x.service_id.reservation_id.id in reservation_ids
+                    lambda x: x.reservation_id.id in reservation_ids and x.display_type == False
                 )
                 reservation_show_lines = [
                     {
@@ -819,6 +816,7 @@ class TestFrontEnd(http.Controller):
                             "pms.room.type"
                         ].browse(int(params["room_type_id"]))
 
+
                     # PREFERRED ROOM ID
                     elif (
                         param == "preferred_room_id"
@@ -862,6 +860,9 @@ class TestFrontEnd(http.Controller):
                         reservation_values["board_service_room_id"] = request.env[
                             "pms.room"
                         ].browse(int(params["board_service_room_id"]))
+
+                    # SEGMENTATION
+                    # TODO
 
                     # RESERVATION_LINE
                     elif param == "reservation_line_ids":
@@ -1203,7 +1204,7 @@ class TestFrontEnd(http.Controller):
         if reservation_values.get("room_type_id"):
             room_type_id = request.env["pms.room.type"].search(
                 [("id", "=", int(reservation_values.get("room_type_id")))]
-            )
+            ).id
 
         vals = {
             "checkin": checkin,
@@ -1234,8 +1235,12 @@ class TestFrontEnd(http.Controller):
         if reservation_values.get("channel_type_id"):
             vals["channel_type_id"] = int(reservation_values.get("channel_type_id"))
 
+        if reservation_values.get("segmentation_id"):
+            vals["segmentation_id"] = int(reservation_values.get("segmentation_id"))
+
         if reservation_values.get("agency_id"):
-            vals["channel_type_id"] = int(reservation_values.get("agency_id"))
+            vals["agency_id"] = int(reservation_values.get("agency_id"))
+            vals["channel_type_id"] = request.env["res.partner"].browse(agency_id).sale_channel_id.id
 
         if reservation_values.get("submit"):
             reservation = request.env["pms.reservation"].create(vals)
@@ -1448,13 +1453,17 @@ class TestFrontEnd(http.Controller):
         reservation_values[
             "allowed_board_service_room_ids"
         ] = reservation._get_allowed_board_service_room_ids()
+        reservation_values["board_service_id"] = reservation.board_service_room_id.id
         reservation_values[
             "allowed_segmentations"
         ] = reservation._get_allowed_segmentations()
+        reservation_values["segmentation_ids"] = reservation.segmentation_ids.ids
         reservation_values[
             "allowed_channel_type_ids"
         ] = self._get_allowed_channel_type_ids()
+        reservation_values["channel_type_id"] = reservation.channel_type_id.id
         reservation_values["allowed_agency_ids"] = self._get_allowed_agency_ids()
+        reservation_values["agency_id"] = reservation.agency_id.id
         reservation_values["room_numbers"] = rooms.Rooms._get_available_rooms(
             self=self,
             payload={
