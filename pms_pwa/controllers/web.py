@@ -1214,10 +1214,10 @@ class TestFrontEnd(http.Controller):
             "partner_id": partner.id if partner else False,
         }
         print(vals)
-        if reservation_values.get("room_id"):
-            vals["room_id"] = (
+        if reservation_values.get("preferred_room_id"):
+            vals["preferred_room_id"] = (
                 request.env["pms.room"]
-                .search([("id", "=", int(reservation_values.get("room_id")))])
+                .search([("id", "=", int(reservation_values.get("preferred_room_id")))])
                 .id
             )
 
